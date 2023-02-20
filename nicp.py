@@ -22,7 +22,7 @@ from pytorch3d.ops import (
 from pytorch3d.loss import mesh_laplacian_smoothing
 from local_affine import LocalAffine
 from tqdm import tqdm
-from utils import convert_mesh_to_pcl, pointcloud_normal, mesh_boundary
+from utils import convert_mesh_to_pcl, mesh_boundary
 
 def non_rigid_icp_mesh2mesh(
     template_mesh: Meshes, 

@@ -28,6 +28,9 @@ def get_mesh_landmark(meshes: Meshes, dummy_renderer: MeshRenderer):
     shape_meshes = Meshes(mesh_verts, mesh_faces, textures)
     rgb_img = dummy_renderer(meshes)[:, :, :, 0, :]
     shape_img = dummy_renderer(shape_meshes)[:, :, :, 0, :]
+    
+    cv2.imwrite("test_data/rgb_img.png", (rgb_img*255).squeeze(0).cpu().numpy()[:,:,::-1])
+    
     rgb_img_uint8 = (rgb_img * 255).permute(0, 3, 1, 2)
     landmarks = fa.get_landmarks_from_batch(rgb_img_uint8)
     landmarks = torch.from_numpy(np.array(landmarks)).to(device).long()

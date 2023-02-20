@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 import numpy as np
 import torch
-import open3d
 from pytorch3d.structures import Meshes, Pointclouds
 
 
@@ -44,20 +43,6 @@ def normalize_pcl(in_pcl: Pointclouds):
     out_pcl = in_pcl.offset(offset)
     out_pcl.scale_(scale)
     return out_pcl, (offset, scale)
-
-def pointcloud_normal(in_pcl: Pointclouds):
-    '''
-        pytorch3d normal estimation is so slow
-        so we use the open3d normal estimation
-    '''
-    points = in_pcl.points_padded()[0]
-    points_numpy = points.squeeze().cpu().data.numpy()
-    pcd = open3d.geometry.PointCloud()
-    pcd.points = open3d.utility.Vector3dVector(points_numpy)
-    pcd.estimate_normals(
-        search_param=open3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30)
-    )
-    return torch.from_numpy(np.asarray(pcd.normals)).to(points.device)
 
 def mesh_boundary(in_faces: torch.LongTensor, num_verts: int):
     '''
